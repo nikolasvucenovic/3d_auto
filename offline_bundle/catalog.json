@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": null,
+  "target": {
+    "operatingSystem": "windows",
+    "architecture": "x64"
+  },
+  "profiles": {
+    "animatic-minimum": [],
+    "animatic-generative": [],
+    "full-vfx-research": []
+  },
+  "components": [],
+  "status": "catalog-skeleton",
+  "notes": "Populate with pinned components only. Every component requires version, relativePath, sha256, sourceUrl, install method, size, and license note."
+}
+
