@@ -1,0 +1,15 @@
+{
+  "name": "3d-auto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline text-to-Blender scene and animatic workstation",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

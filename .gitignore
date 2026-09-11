@@ -1,0 +1,13 @@
+jobs/
+config.local.json
+*.log
+.DS_Store
+Thumbs.db
+
+# Portable payloads live with a transferable working copy but are not pushed to GitHub.
+# The catalogs, checksums, and documentation remain tracked.
+offline_bundle/payloads/**
+!offline_bundle/payloads/**/.gitkeep
+offline_bundle/cache/**
+!offline_bundle/cache/**/.gitkeep
+
