@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D Auto</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">LOCAL VFX WORKSTATION</p>
+        <h1>Direct the scene.<br><span>Keep every version.</span></h1>
+      </div>
+      <div id="readiness" class="status">Checking Blender…</div>
+    </header>
+
+    <section class="composer">
+      <label for="prompt">Scene direction</label>
+      <textarea id="prompt" rows="9" spellcheck="true">Create a large red sphere on the left and a blue cube on the right. The sphere spins while the cube rises. Add a ground plane. Make an 8 second animatic at 24 fps.</textarea>
+      <div class="controls">
+        <div class="mode" role="group" aria-label="Output mode">
+          <button class="mode-button active" data-mode="animatic">Animatic</button>
+          <button class="mode-button" data-mode="final">Final render</button>
+        </div>
+        <button id="create" class="create">Create version</button>
+      </div>
+    </section>
+
+    <section id="result" class="result hidden" aria-live="polite"></section>
+    <p class="footer">Offline by design · New folder for every request · No destructive cleanup</p>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
+
