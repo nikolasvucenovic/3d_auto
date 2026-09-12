@@ -39,3 +39,7 @@ Source: https://github.com/jabbertones-cloud/blender-mcp
 Keep the fixed Blender executor as the production path during the three-level planner benchmark. It already runs locally, has a small auditable surface, and writes only into new result directories. Reuse an existing MCP package first for read-only scene inspection, typed edits, viewport capture, documentation retrieval, and protocol/client compatibility. Route any accepted mutation into 3D Auto's validated scene-plan or patch types.
 
 Do not expose `execute_python`, general shell commands, arbitrary file writes, deletion, moves, cleanup, remote asset downloads, or telemetry. Re-evaluate this decision after a pinned MCP candidate passes small, medium, and large tests offline.
+
+## Local presence status
+
+As of 2026-09-12, these MCP candidates have been researched but none has been adopted, cloned into the portable bundle, checksum-pinned, or accepted as a local dependency. The current Blender control path is repository-owned code plus local Blender. A future MCP selection is complete only when its source archive, runtime dependencies, license, checksum, configuration, and offline benchmark result are present in `offline_bundle/catalog.json` and the expected bundle paths.

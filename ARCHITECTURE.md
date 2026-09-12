@@ -13,7 +13,7 @@ Written direction
 Local planner ---> validated scene-plan.json ---> Blender executor
   |                                                |       |
   | deterministic fallback                        |       +--> final render
-  + local LLM (planned)                           +----------> animatic
+  + local LLM (implemented)                       +----------> animatic
                                                             |
                                                             v
                                                   ComfyUI video-to-video
@@ -27,7 +27,7 @@ A dependency-free Node server hosts the interface on loopback only. It creates j
 
 ### Scene planner
 
-The planner emits a constrained JSON document describing objects, materials, layout, animation, camera, lighting, duration, frame rate, and output intent. Version 0.1 includes a deterministic parser. A local LLM adapter will be added behind the same schema, with validation and repair before Blender sees the plan.
+The planner emits a constrained JSON document describing objects, materials, layout, animation, camera, lighting, duration, frame rate, and output intent. Version 0.1 includes a deterministic parser and a local llama.cpp adapter behind the same schema, with validation and repair before Blender sees the plan.
 
 ### Blender executor
 
@@ -41,6 +41,10 @@ Blender runs in a separate background process with one new scene per job. It rea
 ### Local generative finishing
 
 ComfyUI is the preferred integration because it is local, node-based, scriptable through an HTTP API, and lets the studio own repeatable workflows. Initial integration should export an image sequence plus depth, normals, object masks, and motion vectors where possible. Those controls are more stable than feeding only the beauty animatic.
+
+### Quarantined full-script benchmark
+
+The Western standoff benchmark deliberately tests complete model-generated Blender Python outside the production boundary. Raw output is never executed directly: a deterministic adapter writes a separate candidate and a static gate checks safety and completion before Blender runs in a new result directory. Required `.blend`, evidence manifest, and sixteen frames determine success because Blender may return exit code zero after a script traceback. These repairs and failures are part of the score; production still accepts validated scene plans only.
 
 ## Preservation rules
 

@@ -1,3 +1,4 @@
+158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541  payloads/runtimes/node/v24.21.0/node-v24.21.0-win-x64.zip
 c77bfcd9ed8d91e8721a2d6a290b907fddd4fa5412a47b21c6fa1709116b85f9  payloads/runtimes/llama.cpp/b10809/llama-b10809-bin-win-cuda-12.4-x64.zip
 8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6  payloads/runtimes/llama.cpp/b10809/cudart-llama-bin-win-cuda-12.4-x64.zip
 4b78837bbec5ee248e4a5642bf608b6793721af41b92589e40c8da0bce58b907  payloads/models/language/qwen3-coder-30b-a3b-instruct/Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf

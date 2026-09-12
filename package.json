@@ -9,6 +9,7 @@
     "test": "node --test",
     "benchmark": "node src/evaluation-runner.mjs --planner both",
     "benchmark:baseline": "node src/evaluation-runner.mjs --planner deterministic",
+    "benchmark:western:local": "powershell -NoProfile -ExecutionPolicy Bypass -File run-western-local.ps1",
     "audit:bundle": "node installer/modules/verify-catalog.mjs"
   },
   "engines": {

@@ -115,3 +115,9 @@ The pinned local planner is now llama.cpp `b10809` with the Qwen3-Coder 30B-A3B 
 Existing Blender MCP systems were reviewed again before implementing an MCP facade. Blender Lab confirms an official local llama.cpp route but warns that its current server executes generated code without guards. ahujasid/blender-mcp has a mature bridge but also exposes arbitrary Python and telemetry. Typed/safe-mode forks offer reusable ideas but require pinned offline evaluation. The decision and candidate sources are recorded in [docs/BLENDER_MCP_EVALUATION.md](docs/BLENDER_MCP_EVALUATION.md).
 
 The project will reuse local MCP protocol, inspection, viewport, and typed-operation work where it passes the gate. The fixed scene-plan executor remains the trusted mutation boundary until a candidate proves equivalent preservation and offline behavior.
+
+## 2026-09-12 benchmark update
+
+The compact local planner now passes small, medium, and large cases through the validated scene-plan path. A separate comprehensive Western standoff test measured full Blender Python generation. The final seeded local run completed only after a logged deterministic adapter corrected Blender 5.2 APIs, missing bindings, and mechanically incomplete values. Its 84-object, sixteen-camera scene rendered successfully, but visual review showed much weaker composition and detail than the 142-object Codex reference.
+
+This result reinforces the architecture decision: reuse the local model for bounded plans and patches, use fixed Blender operations for production, and retain full-script generation only as a quarantined stress test. The exact runs and report are listed in [CONTINUITY.md](CONTINUITY.md).

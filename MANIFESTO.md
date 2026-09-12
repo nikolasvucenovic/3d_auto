@@ -45,6 +45,10 @@ The repository must be sufficient for a new operator or agent to understand the 
 
 Large payloads and generated jobs remain outside Git, but their immutable source URLs, versions, sizes, checksums, canonical paths, licenses, and recovery commands must be committed. A missing workstation may cost compute time; it must not cost project knowledge.
 
+### Tests prove artifacts, not messages
+
+Every launcher and generated workflow must be run through the same entry point an operator uses. Success requires the expected files, metadata, and visual evidence; a process exit code or printed success line is not sufficient. Failed model outputs, adapter revisions, tracebacks, and renders remain preserved so fixes can be evaluated against the actual failure.
+
 ### Offline means complete
 
 An offline installation must not quietly depend on the internet. Once its portable dependency bundle has been prepared, installation, model loading, scene creation, rendering, help material, and recovery must all work with networking disabled.

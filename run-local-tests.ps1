@@ -11,12 +11,13 @@ $RuntimeRoot = Join-Path $ProjectRoot 'offline_bundle\payloads\runtimes\llama.cp
 $Server = Join-Path $RuntimeRoot 'bin\llama-server.exe'
 $CudaDirectory = Join-Path $RuntimeRoot 'cuda'
 $Model = Join-Path $ProjectRoot 'offline_bundle\payloads\models\language\qwen3-coder-30b-a3b-instruct\Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf'
+$Node = Join-Path $ProjectRoot 'offline_bundle\payloads\runtimes\node\v24.21.0\node-v24.21.0-win-x64\node.exe'
 $RunStamp = Get-Date -Format 'yyyyMMddTHHmmss'
 $LogDirectory = Join-Path $ProjectRoot "local-llm-runs\$RunStamp"
 $ServerOut = Join-Path $LogDirectory 'llama-server.stdout.log'
 $ServerErr = Join-Path $LogDirectory 'llama-server.stderr.log'
 
-foreach ($RequiredFile in @($Server, $Model)) {
+foreach ($RequiredFile in @($Server, $Model, $Node)) {
     if (-not (Test-Path -LiteralPath $RequiredFile -PathType Leaf)) {
         throw "Required portable payload is missing: $RequiredFile"
     }
@@ -41,7 +42,7 @@ try {
     if (-not $Ready) { throw "llama-server did not become ready. See $ServerErr" }
 
     $CaseArgument = if ($Size -eq 'medium-large') { 'medium,large' } else { $Size }
-    & node (Join-Path $ProjectRoot 'src\evaluation-runner.mjs') --planner $Planner --case $CaseArgument --endpoint 'http://127.0.0.1:8080'
+    & $Node (Join-Path $ProjectRoot 'src\evaluation-runner.mjs') --planner $Planner --case $CaseArgument --endpoint 'http://127.0.0.1:8080'
     if ($LASTEXITCODE -ne 0) { throw "Benchmark runner exited with code $LASTEXITCODE." }
 
     $LatestReport = Get-ChildItem (Join-Path $ProjectRoot 'benchmark-results') -Filter report.html -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1

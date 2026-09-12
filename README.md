@@ -43,7 +43,7 @@ Example:
 
 > Create a large red sphere on the left and a blue cube on the right. The sphere spins while the cube rises. Add a ground plane. Make an 8 second animatic at 24 fps.
 
-This deterministic compiler is the safe fallback. The next layer will add a local language model that produces the same validated scene-plan format, enabling richer direction without changing the Blender execution boundary.
+This deterministic compiler is the safe fallback. The bundled local language model now produces the same validated scene-plan format, enabling richer direction without changing the Blender execution boundary.
 
 ## Output layout
 
@@ -77,3 +77,11 @@ Run all comparisons in another window:
 ```
 
 For the smallest token spend, run one case with `-Size small`, `medium`, or `large`. Use `-Planner deterministic` to run Blender without spending any model tokens. Each local-model result records the server's prompt and completion token counts when available.
+
+For a one-click run that does not require global Node, double-click `Run 3D Auto Tests.bat`.
+
+## Comprehensive Western test
+
+Double-click `Run Western Standoff Local Test.bat` to run the frozen 30-second Western standoff stress test entirely with local inference and Blender. Each run preserves the raw model script, records deterministic Blender 5.2 compatibility changes, performs a safety/completeness audit, creates a new `.blend`, and renders one labeled frame for each of sixteen shots.
+
+The full-script benchmark is a quarantined evaluation path. Production work continues to use validated scene-plan data and the fixed Blender executor. See [benchmarks/western-standoff/README.md](benchmarks/western-standoff/README.md) and [CONTINUITY.md](CONTINUITY.md) for the latest verified report.

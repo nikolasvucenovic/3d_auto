@@ -1,17 +1,19 @@
 {
   "schemaVersion": "0.1.0",
-  "generatedAt": "2026-09-11T14:54:29Z",
+  "generatedAt": "2026-09-12T09:10:00Z",
   "target": {
     "operatingSystem": "windows",
     "architecture": "x64"
   },
   "profiles": {
     "animatic-minimum": [
+      "node-v24.21.0-windows-x64",
       "llama.cpp-b10809-cuda-12.4-x64",
       "llama.cpp-b10809-cudart-12.4-x64",
       "qwen3-coder-30b-a3b-instruct-q5-k-m"
     ],
     "animatic-generative": [
+      "node-v24.21.0-windows-x64",
       "llama.cpp-b10809-cuda-12.4-x64",
       "llama.cpp-b10809-cudart-12.4-x64",
       "qwen3-coder-30b-a3b-instruct-q5-k-m"
@@ -19,6 +21,21 @@
     "full-vfx-research": []
   },
   "components": [
+    {
+      "id": "node-v24.21.0-windows-x64",
+      "name": "Node.js LTS Windows x64 portable runtime",
+      "version": "v24.21.0",
+      "platform": "windows-x64",
+      "relativePath": "payloads/runtimes/node/v24.21.0/node-v24.21.0-win-x64.zip",
+      "sha256": "158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541",
+      "sourceUrl": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-win-x64.zip",
+      "installMethod": "extract-additively",
+      "size": 37618919,
+      "licenseNote": "Node.js project license; official nodejs.org LTS release archive.",
+      "dependencies": [],
+      "status": "verified",
+      "collectedAt": "2026-09-12T08:30:00Z"
+    },
     {
       "id": "llama.cpp-b10809-cuda-12.4-x64",
       "name": "llama.cpp Windows CUDA 12.4 x64",

@@ -31,6 +31,12 @@ flowchart TD
     Artifacts --> Benchmark
     Benchmark --> Report[HTML report / facts / diffs / token usage]
 
+    LocalAdapter --> Quarantine[Full-script stress-test quarantine]
+    Quarantine --> Compat[Logged deterministic compatibility adapter]
+    Compat --> Audit[Static safety + completion audit]
+    Audit --> Evidence[Isolated Blender build + 16 evidence frames]
+    Evidence --> Report
+
     Bundle[Portable offline bundle / catalog / checksums] --> Llama
     Bundle --> Model
     Bundle --> Orchestrator
@@ -76,3 +82,4 @@ The MCP layer has no general shell, Python execution, arbitrary file-write, over
 - Small, medium, and large cases cap completion budgets at 800, 1,400, and 2,200 tokens.
 - Every response records reported prompt and completion tokens for comparison.
 - Blender rendering, validators, diffs, reports, and deterministic tests use no model tokens.
+- The comprehensive full-script test uses a fixed seed and one generation call; compatibility fixes, audits, Blender runs, evidence rendering, and HTML comparison use no model tokens.
