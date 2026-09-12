@@ -31,6 +31,20 @@ The order is:
 
 Research is not a reason to assemble an uncontrolled collection of tools. A candidate enters the installation catalog only after it has a defined purpose, pinned version, known dependencies, storage location, compatibility result, and removal/upgrade policy. We learn from existing systems first, then build the parts needed to connect them into a dependable offline studio workflow.
 
+### Reuse proven local work before building
+
+Before implementing a component, search maintained open-source projects, official application extensions, published research, and model repositories for an existing local solution. Prefer adapting and pinning a proven component when it passes the project's offline, safety, portability, licensing, and preservation tests. Custom code should provide the smallest missing integration or safety layer.
+
+“Available online” does not mean “online at runtime.” Every adopted component must be downloaded into the portable bundle, checksum-verified, licensed for the intended use, configured for loopback or process-local communication, and tested with networking unavailable. Hosted inference, required cloud accounts, telemetry that cannot be disabled, hidden caches, and automatic remote asset retrieval fail the offline gate.
+
+Existing MCP implementations may be reused for protocol definitions, typed tools, scene inspection, and Blender integration. Any path that executes unrestricted model-generated Python remains outside the trusted production boundary. 3D Auto's normal execution path accepts validated data and fixed operations only.
+
+### Continuity is a project artifact
+
+The repository must be sufficient for a new operator or agent to understand the product, current state, selected dependencies, verification evidence, unresolved risks, and exact next commands without relying on chat history or one person's memory. Every material work session updates [CONTINUITY.md](CONTINUITY.md) and the relevant catalog, research, architecture, and operating documents before changes are pushed.
+
+Large payloads and generated jobs remain outside Git, but their immutable source URLs, versions, sizes, checksums, canonical paths, licenses, and recovery commands must be committed. A missing workstation may cost compute time; it must not cost project knowledge.
+
 ### Offline means complete
 
 An offline installation must not quietly depend on the internet. Once its portable dependency bundle has been prepared, installation, model loading, scene creation, rendering, help material, and recovery must all work with networking disabled.

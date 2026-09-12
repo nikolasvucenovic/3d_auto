@@ -1,0 +1,23 @@
+[
+  {
+    "id": "small",
+    "maxTokens": 800,
+    "prompt": "Create a large red sphere on the left and a blue cube on the right. The sphere spins. Make a 4 second animatic at 24 fps.",
+    "expect": { "typeCounts": { "sphere": 1, "cube": 1 }, "animatedType": "sphere", "animationType": "rotate", "fps": 24, "durationSeconds": 4 },
+    "revision": { "request": "Change only the camera lens to 70mm. Preserve everything else.", "editable": ["camera"], "expect": { "cameraLensMm": 70 } }
+  },
+  {
+    "id": "medium",
+    "maxTokens": 1400,
+    "prompt": "Create a product shot: a gold cylinder centered on a black plane, with two small blue spheres left and right. Rotate the cylinder over 6 seconds at 24 fps. Use a readable three-quarter camera and two area lights.",
+    "expect": { "typeCounts": { "cylinder": 1, "plane": 1, "sphere": 2 }, "animatedType": "cylinder", "animationType": "rotate", "horizontalPlane": true, "minCameraDistance": 10, "fps": 24, "durationSeconds": 6 },
+    "revision": { "request": "Change only the cylinder to blue. Preserve its transform and animation, and preserve the camera, lights, floor, and timeline.", "editable": ["objects"], "expect": { "objectType": "cylinder", "color": "blue" } }
+  },
+  {
+    "id": "large",
+    "maxTokens": 2200,
+    "prompt": "Build an 8 second 24 fps warehouse animatic from primitives. Add a large gray floor plane, six orange crates as cubes in two rows, a silver cylinder hero object centered between them, and two cones marking the front aisle. The hero rises while the scene remains readable from a wide three-quarter camera. Use key and fill area lights.",
+    "expect": { "typeCounts": { "plane": 1, "cube": 6, "cylinder": 1, "cone": 2 }, "animatedType": "cylinder", "animationType": "translate", "horizontalPlane": true, "minCameraDistance": 10, "fps": 24, "durationSeconds": 8 },
+    "revision": { "request": "Change only the camera lens to 50mm. Preserve all objects, materials, animations, lights, and timeline exactly.", "editable": ["camera"], "expect": { "cameraLensMm": 50 } }
+  }
+]

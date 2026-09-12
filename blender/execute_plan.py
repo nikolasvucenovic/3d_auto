@@ -13,6 +13,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--plan", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--preview", action="store_true")
     return parser.parse_args(arguments)
 
 
@@ -23,6 +24,7 @@ def look_at(obj, target):
 
 def make_material(spec):
     material = bpy.data.materials.new(spec["name"])
+    material.diffuse_color = spec["baseColor"]
     material.use_nodes = True
     principled = material.node_tree.nodes.get("Principled BSDF")
     principled.inputs["Base Color"].default_value = spec["baseColor"]
@@ -73,7 +75,7 @@ def animate(obj, spec):
         obj.keyframe_insert("location", frame=end)
 
     if obj.animation_data and obj.animation_data.action:
-        for curve in obj.animation_data.action.fcurves:
+        for curve in getattr(obj.animation_data.action, "fcurves", []):
             for point in curve.keyframe_points:
                 point.interpolation = "BEZIER"
 
@@ -98,7 +100,7 @@ def add_light(spec):
     look_at(light, [0, 0, 1])
 
 
-def configure_scene(scene, plan, output_directory):
+def configure_scene(scene, plan, output_directory, preview=False):
     timeline = plan["timeline"]
     output = plan["output"]
     scene.frame_start = timeline["startFrame"]
@@ -107,11 +109,16 @@ def configure_scene(scene, plan, output_directory):
     scene.render.resolution_x = output["width"]
     scene.render.resolution_y = output["height"]
     scene.render.resolution_percentage = 100
-    scene.render.image_settings.file_format = "FFMPEG"
-    scene.render.ffmpeg.format = "MPEG4"
-    scene.render.ffmpeg.codec = "H264"
-    scene.render.ffmpeg.constant_rate_factor = "MEDIUM"
-    scene.render.filepath = os.path.join(output_directory, f'{output["mode"]}.mp4')
+    if preview:
+        scene.render.image_settings.file_format = "PNG"
+        scene.render.resolution_percentage = 50
+        scene.render.filepath = os.path.join(output_directory, "preview.png")
+    else:
+        scene.render.image_settings.file_format = "FFMPEG"
+        scene.render.ffmpeg.format = "MPEG4"
+        scene.render.ffmpeg.codec = "H264"
+        scene.render.ffmpeg.constant_rate_factor = "MEDIUM"
+        scene.render.filepath = os.path.join(output_directory, f'{output["mode"]}.mp4')
     if output["mode"] == "animatic":
         scene.render.engine = "BLENDER_WORKBENCH"
         scene.display.shading.light = "STUDIO"
@@ -120,7 +127,8 @@ def configure_scene(scene, plan, output_directory):
         scene.display.shading.show_cavity = True
     else:
         scene.render.engine = "BLENDER_EEVEE_NEXT"
-        scene.render.image_settings.file_format = "FFMPEG"
+        if not preview:
+            scene.render.image_settings.file_format = "FFMPEG"
 
     world = scene.world or bpy.data.worlds.new("World")
     scene.world = world
@@ -137,7 +145,7 @@ def main():
     os.makedirs(args.output, exist_ok=True)
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
-    configure_scene(scene, plan, args.output)
+    configure_scene(scene, plan, args.output, args.preview)
     for spec in plan["objects"]:
         add_object(spec)
     add_camera(plan["camera"], scene)
@@ -147,9 +155,12 @@ def main():
     if os.path.exists(scene_path):
         raise RuntimeError(f"Refusing to overwrite existing scene: {scene_path}")
     bpy.ops.wm.save_as_mainfile(filepath=scene_path)
-    bpy.ops.render.render(animation=True)
+    if args.preview:
+        scene.frame_set(plan["timeline"]["startFrame"])
+        bpy.ops.render.render(write_still=True)
+    else:
+        bpy.ops.render.render(animation=True)
 
 
 if __name__ == "__main__":
     main()
-

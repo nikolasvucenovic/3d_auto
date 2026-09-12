@@ -1,17 +1,70 @@
 {
   "schemaVersion": "0.1.0",
-  "generatedAt": null,
+  "generatedAt": "2026-09-11T14:54:29Z",
   "target": {
     "operatingSystem": "windows",
     "architecture": "x64"
   },
   "profiles": {
-    "animatic-minimum": [],
-    "animatic-generative": [],
+    "animatic-minimum": [
+      "llama.cpp-b10809-cuda-12.4-x64",
+      "llama.cpp-b10809-cudart-12.4-x64",
+      "qwen3-coder-30b-a3b-instruct-q5-k-m"
+    ],
+    "animatic-generative": [
+      "llama.cpp-b10809-cuda-12.4-x64",
+      "llama.cpp-b10809-cudart-12.4-x64",
+      "qwen3-coder-30b-a3b-instruct-q5-k-m"
+    ],
     "full-vfx-research": []
   },
-  "components": [],
-  "status": "catalog-skeleton",
-  "notes": "Populate with pinned components only. Every component requires version, relativePath, sha256, sourceUrl, install method, size, and license note."
+  "components": [
+    {
+      "id": "llama.cpp-b10809-cuda-12.4-x64",
+      "name": "llama.cpp Windows CUDA 12.4 x64",
+      "version": "b10809",
+      "platform": "windows-x64",
+      "relativePath": "payloads/runtimes/llama.cpp/b10809/llama-b10809-bin-win-cuda-12.4-x64.zip",
+      "sha256": "c77bfcd9ed8d91e8721a2d6a290b907fddd4fa5412a47b21c6fa1709116b85f9",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b10809/llama-b10809-bin-win-cuda-12.4-x64.zip",
+      "installMethod": "extract-additively",
+      "size": 253938543,
+      "licenseNote": "MIT; official ggml-org/llama.cpp release asset.",
+      "dependencies": ["llama.cpp-b10809-cudart-12.4-x64"],
+      "status": "verified",
+      "collectedAt": "2026-09-11T14:54:29Z"
+    },
+    {
+      "id": "llama.cpp-b10809-cudart-12.4-x64",
+      "name": "llama.cpp CUDA 12.4 runtime DLLs for Windows x64",
+      "version": "b10809",
+      "platform": "windows-x64",
+      "relativePath": "payloads/runtimes/llama.cpp/b10809/cudart-llama-bin-win-cuda-12.4-x64.zip",
+      "sha256": "8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6",
+      "sourceUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b10809/cudart-llama-bin-win-cuda-12.4-x64.zip",
+      "installMethod": "extract-additively",
+      "size": 391443627,
+      "licenseNote": "NVIDIA CUDA runtime redistribution terms; official llama.cpp release asset.",
+      "dependencies": [],
+      "status": "verified",
+      "collectedAt": "2026-09-11T14:54:29Z"
+    },
+    {
+      "id": "qwen3-coder-30b-a3b-instruct-q5-k-m",
+      "name": "Qwen3-Coder 30B-A3B Instruct Q5_K_M GGUF",
+      "version": "b17cb02dd882d5b6ab62fc777ad2995f19668350",
+      "platform": "any-gguf",
+      "relativePath": "payloads/models/language/qwen3-coder-30b-a3b-instruct/Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf",
+      "sha256": "4b78837bbec5ee248e4a5642bf608b6793721af41b92589e40c8da0bce58b907",
+      "sourceUrl": "https://huggingface.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF/resolve/b17cb02dd882d5b6ab62fc777ad2995f19668350/Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf",
+      "installMethod": "use-in-place",
+      "size": 21725584544,
+      "licenseNote": "Apache-2.0 model repository; review the upstream model card before redistribution.",
+      "dependencies": ["llama.cpp-b10809-cuda-12.4-x64"],
+      "status": "verified",
+      "collectedAt": "2026-09-11T14:54:29Z"
+    }
+  ],
+  "status": "selected-components-verified",
+  "notes": "Pinned for the Windows x64 RTX 5090 planner benchmark. ComfyUI is managed separately and is not included in this selection."
 }
-

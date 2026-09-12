@@ -15,6 +15,7 @@ const COLORS = {
 };
 
 const TYPES = ['cube', 'sphere', 'cylinder', 'cone', 'plane'];
+const QUANTITIES = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8 };
 
 function sentenceBounds(text, index) {
   const start = Math.max(0, text.lastIndexOf('.', index) + 1);
@@ -36,25 +37,42 @@ function colorNear(text, objectIndex) {
   return nearest || { name: 'gray', rgba: COLORS.gray };
 }
 
-function locationFrom(text, ordinal) {
+function nearestWord(text, index, words, maxDistance = Infinity) {
+  const bounds = sentenceBounds(text, index);
+  let nearest = null;
+  for (const word of words) {
+    const expression = new RegExp(`\\b${word}\\b`, 'gi');
+    for (const match of text.slice(bounds.start, bounds.end).matchAll(expression)) {
+      const distance = Math.abs(bounds.start + match.index - index);
+      if (!nearest || distance < nearest.distance) nearest = { word, distance };
+    }
+  }
+  return nearest && nearest.distance <= maxDistance ? nearest.word : undefined;
+}
+
+function locationFrom(text, objectIndex, ordinal) {
   const location = [0, 0, 1];
-  if (/\bleft\b/i.test(text)) location[0] = -3;
-  if (/\bright\b/i.test(text)) location[0] = 3;
-  if (/\bfront\b/i.test(text)) location[1] = -2;
-  if (/\bback|behind\b/i.test(text)) location[1] = 2;
-  if (/\babove|high|top\b/i.test(text)) location[2] = 4;
-  if (/\bground|floor|bottom\b/i.test(text)) location[2] = 0;
-  if (location[0] === 0 && location[1] === 0 && ordinal > 0) {
+  const horizontal = nearestWord(text, objectIndex, ['left', 'right', 'center', 'centered', 'middle']);
+  const depth = nearestWord(text, objectIndex, ['front', 'back', 'behind']);
+  const height = nearestWord(text, objectIndex, ['above', 'high', 'top', 'ground', 'floor', 'bottom']);
+  if (horizontal === 'left') location[0] = -3;
+  if (horizontal === 'right') location[0] = 3;
+  if (depth === 'front') location[1] = -2;
+  if (depth === 'back' || depth === 'behind') location[1] = 2;
+  if (['above', 'high', 'top'].includes(height)) location[2] = 4;
+  if (['ground', 'floor', 'bottom'].includes(height)) location[2] = 0;
+  if (!horizontal && location[1] === 0 && ordinal > 0) {
     location[0] = (ordinal % 2 ? 1 : -1) * Math.ceil(ordinal / 2) * 2.5;
   }
   return location;
 }
 
-function scaleFrom(text, type) {
+function scaleFrom(text, objectIndex, type) {
   if (type === 'plane') return [10, 10, 1];
-  if (/\bhuge|giant\b/i.test(text)) return [3, 3, 3];
-  if (/\blarge|big\b/i.test(text)) return [1.8, 1.8, 1.8];
-  if (/\bsmall|tiny\b/i.test(text)) return [0.55, 0.55, 0.55];
+  const size = nearestWord(text, objectIndex, ['huge', 'giant', 'large', 'big', 'small', 'tiny'], 32);
+  if (size === 'huge' || size === 'giant') return [3, 3, 3];
+  if (size === 'large' || size === 'big') return [1.8, 1.8, 1.8];
+  if (size === 'small' || size === 'tiny') return [0.55, 0.55, 0.55];
   return [1, 1, 1];
 }
 
@@ -91,17 +109,44 @@ export function compileScene(prompt, requestedMode = 'animatic') {
   for (const match of matches) {
     const bounds = sentenceBounds(normalized, match.index);
     const context = normalized.slice(bounds.start, bounds.end).toLowerCase();
+    const prefix = normalized.slice(Math.max(bounds.start, match.index - 70), match.index).toLowerCase();
+    if (/\bthe(?:\s+\w+){0,3}\s*$/.test(prefix)) continue;
     const color = colorNear(normalized, match.index);
-    const index = objects.length;
-    objects.push({
-      id: `${match.type}_${String(index + 1).padStart(2, '0')}`,
-      type: match.type,
-      location: locationFrom(context, index),
-      rotationDegrees: [0, 0, 0],
-      scale: scaleFrom(context, match.type),
-      material: { name: `${color.name}_${match.type}`, baseColor: color.rgba, metallic: color.name === 'gold' || color.name === 'silver' ? 0.75 : 0, roughness: 0.42 },
-      animation: animationFrom(context, endFrame),
-    });
+    const quantityMatch = prefix.match(/\b(one|two|three|four|five|six|seven|eight|\d+)\b(?:\s+\w+){0,5}\s*$/);
+    const quantity = Math.min(12, Number(quantityMatch?.[1]) || QUANTITIES[quantityMatch?.[1]] || 1);
+    for (let occurrence = 0; occurrence < quantity; occurrence += 1) {
+      const index = objects.length;
+      const typeIndex = objects.filter((item) => item.type === match.type).length + 1;
+      const location = locationFrom(normalized, match.index, index);
+      if (quantity > 1 && /\btwo rows?\b/.test(context)) {
+        location[0] = (occurrence % 3 - 1) * 3;
+        location[1] = Math.floor(occurrence / 3) * 3 - 1.5;
+      } else if (quantity > 1 && /\bleft\b/.test(context) && /\bright\b/.test(context)) {
+        location[0] = occurrence % 2 === 0 ? -3 : 3;
+      } else if (quantity > 1) {
+        location[0] += (occurrence - (quantity - 1) / 2) * 2.5;
+      }
+      objects.push({
+        id: `${match.type}_${String(typeIndex).padStart(2, '0')}`,
+        type: match.type,
+        location,
+        rotationDegrees: [0, 0, 0],
+        scale: scaleFrom(normalized, match.index, match.type),
+        material: { name: `${color.name}_${match.type}`, baseColor: color.rgba, metallic: color.name === 'gold' || color.name === 'silver' ? 0.75 : 0, roughness: 0.42 },
+        animation: animationFrom(context, endFrame),
+      });
+    }
+  }
+
+  for (const sentence of normalized.split('.')) {
+    for (const type of TYPES) {
+      if (!new RegExp(`\\bthe\\s+${type}\\b`, 'i').test(sentence)) continue;
+      const animation = animationFrom(sentence, endFrame);
+      if (animation) {
+        const referenced = objects.find((item) => item.type === type);
+        if (referenced) referenced.animation = animation;
+      }
+    }
   }
 
   if (objects.length === 0) {
@@ -118,7 +163,7 @@ export function compileScene(prompt, requestedMode = 'animatic') {
     title: normalized.slice(0, 100),
     timeline: { fps, startFrame: 1, endFrame, durationSeconds },
     world: { backgroundColor: [0.025, 0.025, 0.035, 1], strength: 0.3 },
-    camera: { location: [10, -14, 9], lensMm: 50, target: [0, 0, 1.5] },
+    camera: { location: [10, -14, 9], lensMm: /\bwide\b/i.test(normalized) ? 35 : 50, target: [0, 0, 1.5] },
     lights: [
       { id: 'key', type: 'AREA', location: [4, -4, 8], energy: 1200, size: 5 },
       { id: 'fill', type: 'AREA', location: [-5, -1, 4], energy: 650, size: 4 },

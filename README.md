@@ -4,6 +4,8 @@
 
 The project's governing purpose, research-first process, portability, installation, dependency-storage, and preservation rules are defined in [MANIFESTO.md](MANIFESTO.md). New architecture and installer decisions must conform to it. The initial comparison of existing systems and recommended direction is in [RESEARCH.md](RESEARCH.md).
 
+To resume the project on any machine, start with [CONTINUITY.md](CONTINUITY.md). It records the verified installation state, exact recovery commands, completed work, unresolved risks, and next steps without relying on chat history.
+
 The current `0.1.0` foundation prioritizes the animatic path:
 
 1. Enter a scene description in the local web interface.
@@ -57,3 +59,21 @@ jobs/
 ```
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the intended system and development sequence.
+
+## Planner comparison
+
+The evaluation harness runs three visible Blender tests at increasing scene complexity. Every test creates an initial plan and preview, applies one isolated revision, verifies that unrelated scene sections stayed identical, and writes an HTML report under `benchmark-results/`.
+
+Start the local model server in one PowerShell window:
+
+```powershell
+.\launch-llm.ps1
+```
+
+Run all comparisons in another window:
+
+```powershell
+.\run-benchmark.ps1 -Size all -Planner both
+```
+
+For the smallest token spend, run one case with `-Size small`, `medium`, or `large`. Use `-Planner deterministic` to run Blender without spending any model tokens. Each local-model result records the server's prompt and completion token counts when available.

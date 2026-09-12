@@ -107,3 +107,11 @@ Cycles/EXR final path     ComfyUI video-to-video path
 ## Immediate decision
 
 Continue the small deterministic prototype because it gives us a safe integration harness and produces test artifacts. Do not scale its hand-written text parser into the final intelligence layer. The next engineering work should be the benchmark and schema, followed by local-model evaluation. That sequence keeps research ahead of irreversible stack decisions and converts the workstation's compute advantage into measurable studio value.
+
+## 2026-09-11 implementation update
+
+The pinned local planner is now llama.cpp `b10809` with the Qwen3-Coder 30B-A3B Instruct Q5_K_M GGUF. All payloads are kept under the project-owned offline bundle and verified by size and SHA-256. The three-level benchmark provides small, medium, and large prompts, isolated revisions, exact preservation checks, Blender previews, HTML reports, and local token usage.
+
+Existing Blender MCP systems were reviewed again before implementing an MCP facade. Blender Lab confirms an official local llama.cpp route but warns that its current server executes generated code without guards. ahujasid/blender-mcp has a mature bridge but also exposes arbitrary Python and telemetry. Typed/safe-mode forks offer reusable ideas but require pinned offline evaluation. The decision and candidate sources are recorded in [docs/BLENDER_MCP_EVALUATION.md](docs/BLENDER_MCP_EVALUATION.md).
+
+The project will reuse local MCP protocol, inspection, viewport, and typed-operation work where it passes the gate. The fixed scene-plan executor remains the trusted mutation boundary until a candidate proves equivalent preservation and offline behavior.

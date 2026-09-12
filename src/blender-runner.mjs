@@ -21,10 +21,10 @@ export async function findBlender(configuredPath = '') {
   return null;
 }
 
-export function blenderCommand(blenderPath, executorPath, planPath, outputDirectory) {
+export function blenderCommand(blenderPath, executorPath, planPath, outputDirectory, { preview = false } = {}) {
   return {
     executable: blenderPath || '<BLENDER_PATH>',
-    args: ['--background', '--factory-startup', '--python', executorPath, '--', '--plan', planPath, '--output', outputDirectory],
+    args: ['--background', '--factory-startup', '--python', executorPath, '--', '--plan', planPath, '--output', outputDirectory, ...(preview ? ['--preview'] : [])],
   };
 }
 
@@ -37,4 +37,3 @@ export function runBlender(command, onOutput = () => {}) {
     child.on('close', (code) => code === 0 ? resolve() : reject(new Error(`Blender exited with code ${code}.`)));
   });
 }
-

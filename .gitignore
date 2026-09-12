@@ -1,4 +1,6 @@
 jobs/
+benchmark-results/
+local-llm-runs/
 config.local.json
 *.log
 .DS_Store
@@ -10,4 +12,3 @@ offline_bundle/payloads/**
 !offline_bundle/payloads/**/.gitkeep
 offline_bundle/cache/**
 !offline_bundle/cache/**/.gitkeep
-

@@ -1,5 +1,7 @@
 # Architecture
 
+The complete component, data-flow, MCP, and token-budget diagram is in [docs/SYSTEM_SCHEMA.md](docs/SYSTEM_SCHEMA.md).
+
 ## Product boundary
 
 The app converts creative direction into a validated scene plan. Blender is an execution engine behind that boundary, not the source of truth. This lets us inspect, revise, diff, and regenerate a shot without allowing generated code unrestricted access to the workstation.
@@ -48,6 +50,16 @@ ComfyUI is the preferred integration because it is local, node-based, scriptable
 4. Deletion, moves, cleanup, and replacement require explicit user authorization.
 5. Generated language-model output is data validated against a schema; it is never executed as source code.
 
+## Three-level comparison harness
+
+`benchmarks/cases.json` defines small, medium, and large directions. Each case has an initial prompt, a narrow revision request, factual acceptance checks, and a strict list of sections the revision may change. Both planners feed the same validator and Blender executor.
+
+Each benchmark run creates a new timestamped directory under `benchmark-results/`. It retains initial plans, minimal revision patches, revised plans, check results, token usage reported by the local server, optional Blender preview images, and a single HTML report. Runs never reuse or alter an earlier result.
+
+The local planner uses a compact fixed instruction. Initial calls receive only the scene direction. Revision calls receive only the requested editable sections and return a minimal patch. This bounds context growth while preserving every other section exactly in application code.
+
+Run the deterministic baseline with `node src/evaluation-runner.mjs --planner deterministic`. Run both planners with `node src/evaluation-runner.mjs --planner both`; the local llama.cpp server is expected at `http://127.0.0.1:8080`. Add `--case small`, `--case medium`, or `--case large` for the cheapest targeted run.
+
 ## Development sequence
 
 1. Offline animatic MVP: text, primitives, materials, camera, lighting, keyframes, MP4.
@@ -57,4 +69,3 @@ ComfyUI is the preferred integration because it is local, node-based, scriptable
 5. ComfyUI workflow adapter for controlled video-to-video and image-sequence processing.
 6. Asset catalog, semantic retrieval, reusable rigs, and multi-shot timelines.
 7. Cycles/EXR final-render profiles and render-farm handoff.
-
